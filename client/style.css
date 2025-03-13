@@ -17,6 +17,7 @@ body, button {
     font-family: "Roboto", sans-serif;
     box-sizing: border-box;
     font-size: 16px;
+    padding: 0 24px;
 }
 
 img{
@@ -37,9 +38,15 @@ img{
     gap: 20px;
 }
 
+.main-container h1 {
+    text-align: center;
+}
+
 .button-list {
     display: flex;
     gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .main-container .button-list button {
