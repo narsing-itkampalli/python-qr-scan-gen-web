@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> QRCode App </title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <div class="main-container">
+            <h1>QRCode Create or Reading System</h1>
+
+            <div class="button-list">
+                <button onclick="showQRGeneratorModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M5 5h2v2H5zM1 1h10v10H1zm2 2v6h6V3zm2 14h2v2H5zm-4-4h10v10H1zm2 2v6h6v-6zm10-2h4v2h2v-2h4v2h-4v2h4v6h-4v-2h-4v2h-2v-2h2v-2h-2zm8 8v-2h-2v2zm-2-4h-2v-2h-2v4h4zM17 2v3h-3v2h3v3h2V7h3V5h-3V2Z"/></svg>
+                    Generate 
+                </button>
+                <button onclick="showQrReaderModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3h6v5h-2V5h-4zM9 3v2H5v3H3V3zm6 18v-2h4v-3h2v5zm-6 0H3v-5h2v3h4zM3 11h18v2H3z"/></svg>
+                    Scanning
+                </button>
+            </div>
+        </div>
+
+        <div class="qr-generator-modal hidden" id="qrGeneratorModal">
+            <div class="qr-generator-modal-container">
+                <button class="qr-generator-close" onclick="hideQRGeneratorModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"/></svg>
+                </button>
+                <div class="qr-generator-modal-section" id="qrGeneratorInputSection">
+                    <div class="qr-input-field" id="qrInputField">
+                        <label for="qrInput">Enter data to generate QR Code:</label>
+                        <input type="text" class="qr-input" placeholder="Enter your data" id="qrInput">
+                        <div class="qr-error-message" id="qrErrorMessage"></div>
+                    </div>
+                    <div class="qr-generate-button-container">
+                        <button class="qr-generate-button" id="qrGenerateButton" onclick="generateQRCode()">Generate QR Code</button>
+                    </div>
+                </div>
+                <div class="qr-generator-modal-section hidden" id="qrGeneratorSuccessSection">
+                    <div class="qr-success-image">
+                        <div class="qr-success-image-container" id="qrSuccessImageContainer"></div>
+                    </div>
+                    <div class="qr-success-buttons">
+                        <button class="qr-success-download-button" onclick="downloadQRCode(qrSuccessImageContainer.querySelector('img').src)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z"/></svg>
+                            Download
+                        </button>
+                    </div>
+                    <div class="qr-success-message">QR code generated successfully!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="qr-reader-modal hidden" id="qrReaderModal">
+            <div class="qr-reader-modal-container">
+                <button class="qr-reader-close" onclick="hideQrReaderModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"/></svg>
+                </button>
+                <div class="qr-reader-modal-section" id="qrReaderUploadSection">
+                    <input type="file" accept="image/*" id="qrReaderFileInput" hidden>
+                    <div class="qr-reader-upload-types">
+                        <button class="qr-reader-upload-button" id="qrReaderUploadButton">
+                            <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 16V7.85l-2.6 2.6L7 9l5-5l5 5l-1.4 1.45l-2.6-2.6V16zm-5 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z"/></svg></span>
+                            <span class="label">Upload</span>
+                        </button>
+                        <button class="qr-reader-camera-button" onclick="showQrReaderCameraSection()">
+                            <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 7h1a2 2 0 0 0 2-2a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2"/><path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0-6 0"/></g></svg></span>
+                            <span class="label">Camera</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="qr-reader-modal-section" id="qrReaderResultSection">
+                    <div class="qr-reader-upload-result">
+                        <div class="qr-upload-result-message" id="qrUploadResultMessage">QR Code detected</div>
+                        <div class="qr-upload-result-data">
+                            <div class="qr-upload-result-data-image">
+                                <div class="qr-upload-result-data-image-container" id="qrUploadResultDataImageContainer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="currentColor" d="M30 3.414L28.586 2L2 28.586L3.414 30l2-2H26a2.003 2.003 0 0 0 2-2V5.414zM26 26H7.414l7.793-7.793l2.379 2.379a2 2 0 0 0 2.828 0L22 19l4 3.997zm0-5.832l-2.586-2.586a2 2 0 0 0-2.828 0L19 19.168l-2.377-2.377L26 7.414zM6 22v-3l5-4.997l1.373 1.374l1.416-1.416l-1.375-1.375a2 2 0 0 0-2.828 0L6 16.172V6h16V4H6a2 2 0 0 0-2 2v16z"/></svg>
+                                </div>
+                            </div>
+                            <div class="qr-upload-result-data-text-container">
+                                <div class="qr-upload-result-data-label">Output data</div>
+                                <div class="qr-upload-result-data-text" id="qrUploadResultDataText">Hi</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="qr-reader-upload-result-buttons">
+                        <button onclick="showQRUploadSection()" class="qr-reader-upload-result-read">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4 10l-.707.707L2.586 10l.707-.707zm17 8a1 1 0 1 1-2 0zM8.293 15.707l-5-5l1.414-1.414l5 5zm-5-6.414l5-5l1.414 1.414l-5 5zM4 9h10v2H4zm17 7v2h-2v-2zm-7-7a7 7 0 0 1 7 7h-2a5 5 0 0 0-5-5z"/></svg>
+                            Scan another
+                        </button>
+                    </div>
+                </div>
+                <div class="qr-reader-modal-section" id="qrReaderCameraSection">
+                    <video class="qr-reader-camera-video" id="cameraVideo" autoplay playsinline height="480"></video>
+                    <canvas id="cameraCanvas" style="display: none;"></canvas>
+                    <div class="qr-reader-upload-result-buttons">
+                        <button onclick="showQRUploadSection()" class="qr-reader-upload-result-read">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4 10l-.707.707L2.586 10l.707-.707zm17 8a1 1 0 1 1-2 0zM8.293 15.707l-5-5l1.414-1.414l5 5zm-5-6.414l5-5l1.414 1.414l-5 5zM4 9h10v2H4zm17 7v2h-2v-2zm-7-7a7 7 0 0 1 7 7h-2a5 5 0 0 0-5-5z"/></svg>
+                            Go back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="./qrcode-generator.js"></script>
+        <script src="./qrcode-reader.js"></script>
+    </body>
+
+</html>
