@@ -16,7 +16,7 @@ A lightweight QR code scanner and generator web application built with Python's 
 
 1. **Clone the repository**
 ```bash
-git clone [https://github.com/narsing-itkampalli/python-qr-scan-gen-web.git](https://github.com/narsing-itkampalli/python-qr-scan-gen-web.git)
+git clone https://github.com/narsing-itkampalli/python-qr-scan-gen-web.git
 cd py-qr-scan-gen-web
 ```
 
